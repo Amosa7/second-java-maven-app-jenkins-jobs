@@ -1,13 +1,38 @@
+#!/usr/bin/env groovy
+
+
+
+@Library('Jenkins-shared-lib') 
+
+def gv
+
 pipeline {
     tools {
         maven "maven-3.9"
     }
     agent any
     stages {
+
+        stage("init") {
+            steps {
+                script {
+                    gv = load "script.groovy"
+                }
+            }
+        }
+
         stage("BuildApp") {
             steps {
                 script {
-                    sh "mvn clean package"
+                    buildJar()
+                }
+            }
+        }
+
+        stage("Testing") {
+            steps {
+                script {
+                    gv.Testing()
                 }
             }
         }
@@ -15,13 +40,7 @@ pipeline {
         stage("Build and Push Image") {
             steps {
                 script {
-                    withCredentials([usernamePassword(credentialsId: "docker-hub-repo2", passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
-                        sh "echo ${DOCKER_PASSWORD} | docker login -u ${DOCKER_USERNAME} --password-stdin"
-
-                        // Build and push the Image
-                        sh "docker build -t amosa77/demo-app:njma-3.0 ."
-                        sh "docker push docker.io/amosa77/demo-app:njma-3.0"
-                    }
+                  buildImage()  
                 }
             }
         }
@@ -29,8 +48,7 @@ pipeline {
         stage("DeployJAr") {
             steps {
                 script {
-                    echo "Deploying the Application from ${env.BRANCH_NAME}"
-                    // Add your deployment steps here
+                    gv.DeployJAr()
                 }
             }
         }
