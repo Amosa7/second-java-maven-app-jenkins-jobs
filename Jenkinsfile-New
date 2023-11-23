@@ -15,7 +15,7 @@ pipeline {
         stage("Build and Push Image") {
             steps {
                 script {
-                    withCredentials([usernamePassword(credentialsId: "doker-hub-repo", passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
+                    withCredentials([usernamePassword(credentialsId: "docker-hub-repo2", passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
                         sh "echo ${DOCKER_PASSWORD} | docker login -u ${DOCKER_USERNAME} --password-stdin"
 
                         // Build and push the Image
