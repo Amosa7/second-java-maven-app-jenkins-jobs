@@ -20,7 +20,7 @@ pipeline {
 
                         // Build and push the Image
                         sh "docker build -t amosa77/demo-app:njma-3.0 ."
-                        sh "docker push amosa77/demo-app:njma-3.0"
+                        sh "docker push docker.io/amosa77/demo-app:njma-3.0"
                     }
                 }
             }
