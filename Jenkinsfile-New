@@ -1,0 +1,41 @@
+#!/usr/bin/env groovy
+
+pipeline {
+    tools {
+        maven "maven-3.9"
+    }
+    agent any {
+        stages {
+            stage("BuildApp") {
+                steps {
+                    script {
+                        sh "mvn package"
+                    }
+                }
+            }
+
+            stage("Build and Push Image") {
+                steps {
+                    script {
+                         withCredentials([usernamePassword(credentialsId: "${doker-hub-repo}", passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
+                            sh "echo ${DOCKER_PASSWORD} | docker login -u ${DOCKER_USERNAME} --password-stdin "
+
+                            // Build and push the Image
+                            sh "docker build -t amosa77/demo-app:njma-3.0 . "
+                            sh "docker push amosa77/demo-app:njma-3.0"
+                         }
+                    }
+                }
+            }
+
+            stage(DeployJAr) {
+                steps {
+                    script {
+                        echo "Deploying the Application from ${env.BRANCH_NAME}" 
+                    }
+                }
+            } 
+            
+        }
+    }
+}
