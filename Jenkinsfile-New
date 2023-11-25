@@ -74,7 +74,6 @@ pipeline {
                     withCredentials([usernamePassword(credentialsId: 'my-github-credentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                         sh "git config --global user.email 'amosabashir7@gmail.com'"
                         sh "git config --global user.name 'Amosa7'"
-                        sh "git config --global --unset https.proxy"
 
                         sh "git status"
                         sh "git branch"
@@ -83,7 +82,7 @@ pipeline {
                         sh "git remote set-url origin 'https://${USERNAME}:${PASSWORD}@github.com/Amosa7/second-java-maven-app-jenkins-jobs.git'"
                         sh "git add ."
                         sh 'git commit -m "ci: version bump"'
-
+                        sh "git config --global --unset https.proxy"
                         sh "git push origin HEAD:master"
                     }
                 }
