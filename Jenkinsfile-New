@@ -67,18 +67,29 @@ pipeline {
             }
         }
 
+        stage('Checkout External Project') {
+            steps {
+                git branch: 'master', 
+                    credentialsId: 'github-credentials',  // Use the correct credentials ID
+                    url: 'https://github.com/Amosa7/second-java-maven-app-jenkins-jobs.git'
+            }
+        }
+
         stage("commit version update") {
             steps {
                 script {
-                    echo "Building Docker image of the application..."
-                    withCredentials([usernamePassword(credentialsId: 'github-credentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                    withCredentials([usernamePassword(credentialsId: 'my-github-credentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                         sh "git config --global user.email 'amosabashir7@gmail.com'"
                         sh "git config --global user.name 'Amosa7'"
-                        echo "Git remote URL: https://amosabashir7@gmail.com:${PASSWORD}@github.com/Amosa7/second-java-maven-app-jenkins-jobs.git"
+
+                        sh "git status"
+                        sh "git branch"
+                        sh "git config --list"
+
                         sh "git remote set-url origin 'https://${USERNAME}:${PASSWORD}@github.com/Amosa7/second-java-maven-app-jenkins-jobs.git'"
                         sh "git add ."
                         sh 'git commit -m "ci: version bump"'
-                        sh "git push -u origin HEAD:master"
+                        sh "git push origin https://${USERNAME}:${PASSWORD}@github.com/Amosa7/second-java-maven-app-jenkins-jobs.git HEAD:jenkins-jobs"
                     }
                 }
             }
