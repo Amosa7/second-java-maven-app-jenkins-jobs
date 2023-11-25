@@ -62,6 +62,7 @@ pipeline {
         stage("DeployJAr") {
             steps {
                 script {
+                    echo "Deploying my App..."
                     gv.DeployJAr()
                 }
             }
