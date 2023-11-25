@@ -70,19 +70,16 @@ pipeline {
         stage("commit version update") {
             steps {
                 script {
-                    def githubPat = "<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>"
-                    def githubUrl = "https://${githubPat}@github.com/Amosa7/second-java-maven-app-jenkins-jobs.git"
-
-                    sh "git config --global user.email 'amosabashir7@gmail.com'"
-                    sh "git config --global user.name 'Amosa7'"
-
-                    sh "git config credential.helper '!f() { echo username=amosabashir7; echo password=${githubPat}; }; f'"
-
-                    echo "Git remote URL: $githubUrl"
-
-                    sh "git add ."
-                    sh 'git commit -m "ci: version bump"'
-                    sh "git push -u $githubUrl HEAD:jenkins-jobs"
+                    echo "Building Docker image of the application..."
+                    withCredentials([usernamePassword(credentialsId: 'github-credentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                        sh "git config --global user.email 'amosabashir7@gmail.com'"
+                        sh "git config --global user.name 'Amosa7'"
+                        echo "Git remote URL: https://amosabashir7@gmail.com:${PASSWORD}@github.com/Amosa7/second-java-maven-app-jenkins-jobs.git"
+                        sh "git remote set-url origin 'https://${USERNAME}:${PASSWORD}@github.com/Amosa7/second-java-maven-app-jenkins-jobs.git'"
+                        sh "git add ."
+                        sh 'git commit -m "ci: version bump"'
+                        sh "git push -u origin HEAD:master"
+                    }
                 }
             }
         }
