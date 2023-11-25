@@ -74,6 +74,7 @@ pipeline {
                     withCredentials([usernamePassword(credentialsId: 'my-github-credentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                         sh "git config --global user.email 'amosabashir7@gmail.com'"
                         sh "git config --global user.name 'Amosa7'"
+                        git config --global --unset https.proxy
 
                         sh "git status"
                         sh "git branch"
