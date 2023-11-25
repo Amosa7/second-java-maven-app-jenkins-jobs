@@ -73,8 +73,9 @@ pipeline {
                     credentialsId: 'github-credentials',  // Use the correct credentials ID
                     url: 'https://github.com/Amosa7/second-java-maven-app-jenkins-jobs.git'
 
+                    sh "git status"
                     sh "git add ."
-                    sh 'git commit -m "ci: version bump"'
+                    sh 'git diff --cached --exit-code || git commit -m "ci: version bump"'
                     sh "git push -u origin HEAD:master"
             }
         }
