@@ -83,8 +83,8 @@ pipeline {
                         sh "git config --global user.name 'Amosa7'"
 
                         sh "git status"
-                        git "git branch"
-                        git "config --list"
+                        sh "git branch"
+                        sh "git config --list"
 
                         sh "git remote set-url origin 'https://${USERNAME}:${PASSWORD}@github.com/Amosa7/second-java-maven-app-jenkins-jobs.git'"
                         sh "git add ."
