@@ -1,9 +1,5 @@
 #!/usr/bin/env groovy
 
-
-
-@Library('Jenkins-shared-lib') 
-
 def gv
 
 pipeline {
@@ -21,10 +17,25 @@ pipeline {
             }
         }
 
+        stage("Version Increment") {
+            steps {
+                script {
+                    echo "Incrementing app version... "
+                    sh "mvn build-helper:parse-version versions:set \
+                        -DnewVersion=\\\${parsedVersion.majorVersion}.\\\${parsedVersion.minorVersion}.\\\${parsedVersion.nxtIncrementalVersion} \
+                        version:commit"
+                    def matcher = readfile("pom.xml") =~ "<version>(.+)</version>"
+                    def version = matcher[0][1]
+                    env.IMAG_NAME "$version-$BUILD_NUMBER"
+                }
+            }
+        }
+
         stage("BuildApp") {
             steps {
                 script {
-                    buildJar()
+                    echo "Building the application JAr"
+                    sh "mvn clean package"
                 }
             }
         }
@@ -40,7 +51,12 @@ pipeline {
         stage("Build and Push Image") {
             steps {
                 script {
-                  buildImage()  
+                    echo "building docker image of the appliction docker Image..."
+                    withCredentials([usernamePassword(credentialsId: 'docker-hub-repo2', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                        sh "docker build -t amosa77/demo-app:${IMAG_NAME} ."
+                        sh "echo $PASSWORD | docker login -u $USERNAME --password-stdin"
+                        sh "docker push amosa77/demo-app:${IMAG_NAME}"
+                    }  
                 }
             }
         }
