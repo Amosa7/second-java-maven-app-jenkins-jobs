@@ -79,7 +79,7 @@ pipeline {
                     echo "Git remote URL: $githubUrl"
 
                     sh "git add ."
-                    sh 'git commt -m "ci: version bump"'
+                    sh 'git commit -m "ci: version bump"'
                     sh "git push -u $githubUrl HEAD:jenkins-jobs"
                 }
             }
