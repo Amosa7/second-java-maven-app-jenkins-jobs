@@ -73,10 +73,12 @@ pipeline {
                     credentialsId: 'github-credentials',  // Use the correct credentials ID
                     url: 'https://github.com/Amosa7/second-java-maven-app-jenkins-jobs.git'
 
+                    def hasChanges = sh(script: 'git diff --exit-code pom.xml', returnStatus: true) == 1
+
                     sh "git status"
                     sh "git add ."
-                    sh 'git diff --cached --exit-code || git commit -m "ci: version bump"'
-                    sh "git push -u origin HEAD:master"
+                    sh 'git commit -m "ci: version bump"'
+                    sh "git push -u https://${USERNAME}:${PASSWORD}@github.com/Amosa7/second-java-maven-app-jenkins-jobs.git HEAD:master"
             }
         }
 
