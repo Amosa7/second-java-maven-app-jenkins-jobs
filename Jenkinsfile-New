@@ -76,12 +76,9 @@ pipeline {
                     sh "git config --global user.email 'amosabashir7@gmail.com'"
                     sh "git config --global user.name 'Amosa7'"
 
+                    sh "git config credential.helper '!f() { echo username=amosabashir7; echo password=${githubPat}; }; f'"
+
                     echo "Git remote URL: $githubUrl"
-                    sh "git credential reject"
-                    sh "echo url=${githubUrl} > git-credentials"
-                    sh "echo username=amosabashir7 >> git-credentials"
-                    sh "echo password=${githubPat} >> git-credentials"
-                    sh "git credential approve < git-credentials"
 
                     sh "git add ."
                     sh 'git commit -m "ci: version bump"'
