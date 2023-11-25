@@ -68,14 +68,6 @@ pipeline {
             }
         }
 
-        stage('Checkout External Project') {
-            steps {
-                git branch: 'master', 
-                    credentialsId: 'github-credentials',  // Use the correct credentials ID
-                    url: 'https://github.com/Amosa7/second-java-maven-app-jenkins-jobs.git'
-            }
-        }
-
         stage("commit version update") {
             steps {
                 script {
