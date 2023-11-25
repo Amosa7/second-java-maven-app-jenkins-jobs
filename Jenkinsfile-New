@@ -75,10 +75,10 @@ pipeline {
                         sh "git config --global user.email 'amosabashir7@gmail.com'"
                         sh "git config --global user.name 'Amosa7'"
                         echo "Git remote URL: https://amosabashir7@gmail.com:${PASSWORD}@github.com/Amosa7/second-java-maven-app-jenkins-jobs.git"
-                        sh "git remote set-url origin 'https://amosabashir7@gmail.com:${PASSWORD}@github.com/Amosa7/second-java-maven-app-jenkins-jobs.git'"
+                        sh "git remote add origin 'https://amosabashir7@gmail.com:${PASSWORD}@github.com/Amosa7/second-java-maven-app-jenkins-jobs.git'"
                         sh "git add ."
                         sh 'git commit -m "ci: version bump"'
-                        sh "git push origin HEAD:main"
+                        sh "git push -u origin HEAD:master"
                     }
                 }
             }
