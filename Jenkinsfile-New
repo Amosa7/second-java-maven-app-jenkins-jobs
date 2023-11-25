@@ -73,8 +73,8 @@ pipeline {
                     echo "Building Docker image of the application..."
                     withCredentials([usernamePassword(credentialsId: 'github-credentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                         sh "git config --global user.email 'amosabashir7@gmail.com'"
-                        sh "git config --global user.name 'Amosa'"
-                        sh "git remote set-url origin https://${USERNAME}:${PASSWORD}@github.com/Amosa7/second-java-maven-app-jenkins-jobs.git"
+                        sh "git config --global user.name 'Amosa7'"
+                        sh "git remote set-url origin https://amosabashir7@gmail.com:${PASSWORD}@github.com/Amosa7/second-java-maven-app-jenkins-jobs.git"
                         sh "git add ."
                         sh 'git commit -m "ci: version bump"'
                         sh "git push origin HEAD:master"
