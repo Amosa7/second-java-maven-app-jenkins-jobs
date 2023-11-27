@@ -71,7 +71,7 @@ pipeline {
         stage("commit version update") {
             steps {
                 script {
-                    sshagent (credentials: ['your credentials']) {
+                    sshagent (credentials: ['Github-ssh-key']) {
                         sh "git config --global user.email 'amosabashir7@gmail.com'"
                         sh "git config --global user.name 'Amosa7'"
                         sh "git status"
