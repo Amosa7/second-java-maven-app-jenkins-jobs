@@ -5,7 +5,7 @@ def Testing() {
 }
 
 def DeployJAr() {
-    echo "Deploying the Application from ${env.BRANCH_NAME}"
+    echo "Deploying the Application..."
 }
 
 
