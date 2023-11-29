@@ -21,6 +21,10 @@ pipeline {
             steps {
                 script {
                     echo "Deploying the application..."
+                    sshagent(['Aws-ssh-key']) {
+                        def dockerRun = "docker run -d -p 3000:80 amosa77/demo-app:React-Node-1.0"
+                        sh "ssh -o StrictHostKeyChecking=no ec2-user@51.20.255.180 ${dockerRun}"
+                    }     
                 }
             }
         }
