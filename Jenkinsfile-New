@@ -62,37 +62,17 @@ pipeline {
         stage("DeployJAr") {
             steps {
                 script {
+                    echo "Deploying my Application on EC2 instance..."
                     gv.DeployJAr()
-                }
-            }
-        }
 
-        stage('Checkout External Project') {
-            steps {
-                git branch: 'master', 
-                    credentialsId: 'github-credentials',  // Use the correct credentials ID
-                    url: 'https://github.com/Amosa7/second-java-maven-app-jenkins-jobs.git'
-            }
-        }
-
-        stage("commit version update") {
-            steps {
-                script {
-                    withCredentials([usernamePassword(credentialsId: 'my-github-credentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-                        sh "git config --global user.email 'amosabashir7@gmail.com'"
-                        sh "git config --global user.name 'Amosa7'"
-
-                        sh "git status"
-                        sh "git branch"
-                        sh "git config --list"
-
-                        sh "git remote set-url origin 'https://${USERNAME}:${PASSWORD}@github.com/Amosa7/second-java-maven-app-jenkins-jobs.git'"
-                        sh "git add ."
-                        sh 'git commit -m "ci: version bump"'
-                        sh "git push origin https://${USERNAME}:${PASSWORD}@github.com/Amosa7/second-java-maven-app-jenkins-jobs.git HEAD:jenkins-jobs"
+                    sshagent(['Aws-ssh-key']) {
+                         def dockerRun = "docker run -d -p 3000:80 amosa77/demo-app:${IMAG_NAME}"
+                         sh "ssh -o StrictHostKeyChecking=no ec2-user@51.20.255.180 ${dockerRun}"
                     }
+
                 }
             }
         }
+
     }
 }
